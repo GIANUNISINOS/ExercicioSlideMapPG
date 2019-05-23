@@ -68,10 +68,11 @@ public:
         */
         float verticesCoordinates[] = {
                 // positions
-                -width / 2.0f, -height / 2.0f, 0.0f,	// top left
-                -width / 2.0f, height / 2.0f,  0.0f,	// bottom left
-                width  / 2.0f, height / 2.0f,  0.0f, // bottom right
-                width  / 2.0f, -height / 2.0f, 0.0f	// top right
+                width / 2.0f,   0.0f,           0.0f,	// TOP
+                width ,         height / 2.0f,  0.0f,	// RIGHT
+                width  / 2.0f,  height,         0.0f,	// BOTTOM
+                0.0f,           height / 2.0f,  0.0f	// LEFT
+
         };
 
         vertices = new VerticesObject(verticesCoordinates, 12);
@@ -110,8 +111,8 @@ public:
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
 
-                float xi = col*tileWidth  + tileWidth/2;
-                float yi = row*tileHeight + tileHeight/2;
+                float xi = col*tileWidth;
+                float yi = row*tileHeight;
 
                 modelMatrix = glm::mat4(1);
                 modelMatrix = glm::translate(modelMatrix, glm::vec3(xi, yi, 0.0));
