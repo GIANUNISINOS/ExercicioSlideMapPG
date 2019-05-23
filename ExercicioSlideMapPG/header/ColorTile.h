@@ -5,21 +5,36 @@
 #ifndef GAMEOFCOLORS_COLORTILE_H
 #define GAMEOFCOLORS_COLORTILE_H
 
-struct Tile{
+class Tile {
+public:
     glm::vec3 colorsRGB;
     bool isVisible;
+    bool isPair;
 
     Tile() {
-        float r = (rand()%255)/255.0f;
-        float g = (rand()%255)/255.0f;
-        float b = (rand()%255)/255.0f;
-        colorsRGB = glm::vec3(r,g,b);
         isVisible = true;
     }
 
+    void setColor(int row){
+        isPair = (row%2==0);
+
+        float r;
+        float g;
+        float b;
+
+        if(isPair){
+            r = 195/255.0f;
+            g = 255/255.0f;
+            b = 255/255.0f;
+        } else{
+            r = 122/255.0f;
+            g = 122/255.0f;
+            b = 122/255.0f;
+        }
+        colorsRGB = glm::vec3(r,g,b);
 
 
-
+    }
 };
 
 #define numRows 40
@@ -44,7 +59,7 @@ public:
 
         this->setupVertices(tileWidth, tileHeight);
 
-        this-> createMatrixColors();
+        this->createMatrixColors();
     }
 
     void setupVertices(float width, float height) {
@@ -63,10 +78,10 @@ public:
     }
 
     void createMatrixColors(){
-        srand((unsigned) time(NULL)) ;
         for (int row = 0; row < numRows; row++) {
               for (int col = 0; col < numCols; col++) {
                     Tile t = Tile();
+                    t.setColor(row);
                     matrixColors[row][col] = t;
                   }
             }
@@ -79,47 +94,9 @@ public:
 
         if (matrixColors[rowClick][columnClick].isVisible) {
             matrixColors[rowClick][columnClick].isVisible = false;
-            counter = counter+1;
-            Tile tileActual = matrixColors[rowClick][columnClick];
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numCols; col++) {
-                    Tile tileAnother = matrixColors[row][col];
-                    if(tileAnother.isVisible) {
-                        bool notMatched = caculateDMax(tileActual.colorsRGB,tileAnother.colorsRGB);
-                        matrixColors[row][col].isVisible = notMatched;
-                        if(false == notMatched){
-                            counter = counter+1;
-                        }
-                    }
-                }
-            }
         }
 
         return counter;
-    }
-
-    bool caculateDMax(glm::vec3 actual, glm::vec3 another){
-
-        int actualR = actual.x*255;
-        int actualG = actual.y*255;
-        int actualB = actual.z*255;
-
-        int anotherR = another.x*255;
-        int anotherG = another.y*255;
-        int anotherB = another.z*255;
-
-        double distanceOfRed = actualR - anotherR;
-        double distanceOfGreen = actualG - anotherG;
-        double distanceOfBlue = actualB - anotherB;
-
-        double distance = sqrt(pow(distanceOfRed, 2) + pow(distanceOfGreen, 2) + pow(distanceOfBlue, 2));
-        double distanceMax = sqrt(pow((0-255), 2) + pow((0-255), 2) + pow((0-255), 2));
-
-        if(distance / distanceMax <= 0.15){
-            return false;
-        }else{
-            return true;
-        }
     }
 
     void draw(Shader *shaderProgram) {
