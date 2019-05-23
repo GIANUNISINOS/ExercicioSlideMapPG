@@ -125,8 +125,10 @@ public:
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
 
-                float xi = col*tileWidth;
-                float yi = row*tileHeight;
+                //float xi = col*tileWidth;
+                //float yi = row*tileHeight;
+                float xi = col*tileWidth  + row *(tileWidth/2.0f) ;
+                float yi = row*tileHeight/2.0f ;
 
                 modelMatrix = glm::mat4(1);
                 modelMatrix = glm::translate(modelMatrix, glm::vec3(xi, yi, 0.0));
