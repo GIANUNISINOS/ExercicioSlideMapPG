@@ -9,31 +9,42 @@ class Tile {
 public:
     glm::vec3 colorsRGB;
     bool isVisible;
-    bool isPair;
+    bool isSelected;
 
     Tile() {
         isVisible = true;
+        isSelected = false;
     }
 
-    void setColor(int row){
-        isPair = (row%2==0);
+    void setColor(int R,int G,int B){
+        float r;
+        float g;
+        float b;
+
+        r = R/255.0f;
+        g = G/255.0f;
+        b = B/255.0f;
+
+        colorsRGB = glm::vec3(r,g,b);
+    }
+
+    void generateColor(int row){
+        bool isPair = (row%2==0);
 
         float r;
         float g;
         float b;
 
         if(isPair){
-            r = 195/255.0f;
-            g = 255/255.0f;
-            b = 255/255.0f;
+            r = 12/255.0f;
+            g = 195/255.0f;
+            b = 233/255.0f;
         } else{
-            r = 122/255.0f;
-            g = 122/255.0f;
-            b = 122/255.0f;
+            r = 23/255.0f;
+            g = 79/255.0f;
+            b = 214/255.0f;
         }
         colorsRGB = glm::vec3(r,g,b);
-
-
     }
 };
 
@@ -82,7 +93,7 @@ public:
         for (int row = 0; row < numRows; row++) {
               for (int col = 0; col < numCols; col++) {
                     Tile t = Tile();
-                    t.setColor(row);
+                    t.generateColor(row);
                     matrixColors[row][col] = t;
                   }
             }
@@ -92,9 +103,12 @@ public:
         int counter = 0;
         int columnClick = (int) (xPos / tileWidth);
         int rowClick = (int) (yPos / tileHeight);
-
-        if (matrixColors[rowClick][columnClick].isVisible) {
-            matrixColors[rowClick][columnClick].isVisible = false;
+        if(matrixColors[rowClick][columnClick].isVisible){
+            if (matrixColors[rowClick][columnClick].isSelected) {
+                matrixColors[rowClick][columnClick].isSelected = false;
+            } else {
+                matrixColors[rowClick][columnClick].isSelected = true;
+            }
         }
 
         return counter;
@@ -128,15 +142,14 @@ public:
                 Tile tile = matrixColors[row][col];
 
 
-                if(tile.isVisible){
+                if(!tile.isSelected){
                     glUniform3fv(
                             glGetUniformLocation(shaderProgram->Program, "colorValues"), 1,
                             glm::value_ptr(tile.colorsRGB));
                 } else {
-
                     glUniform3fv(
                             glGetUniformLocation(shaderProgram->Program, "colorValues"), 1,
-                            glm::value_ptr(glm::vec3(0,0,0)));
+                            glm::value_ptr(glm::vec3(10,255,10)));
                 }
 
 
