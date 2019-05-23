@@ -101,8 +101,12 @@ public:
 
     int testCliqueMouse(float xPos,float yPos) {
         int counter = 0;
-        int columnClick = (int) (xPos / tileWidth);
-        int rowClick = (int) (yPos / tileHeight);
+
+        int rowClick = (int) (yPos / (tileHeight/2.0f));
+//        printf("Row: %d",rowClick);
+        int columnClick = (int) ((xPos - (rowClick * (tileWidth/2.0f)))/tileWidth);
+//        printf("Column: %d\n",columnClick);
+
         if(matrixColors[rowClick][columnClick].isVisible){
             if (matrixColors[rowClick][columnClick].isSelected) {
                 matrixColors[rowClick][columnClick].isSelected = false;
