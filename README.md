@@ -1,3 +1,3 @@
 # Exercicio SlideMap
-##Processamento Gráfico
-##Integrantes: Gian Boschetti e André Hoffmann
+## Processamento Gráfico
+## Integrantes: Gian Boschetti e André Hoffmann
