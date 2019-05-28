@@ -154,16 +154,36 @@ public:
             float ABy = By-Ay;
             float ABmodule = sqrt(pow(ABx,2)+pow(ABy,2));
 
-            printf("\nABx x %f",Dx);
-            printf("\nrightPointY y %f\n",Dy);
+            float normalABx = ABx / ABmodule;
+            float normalABy = ABy / ABmodule;
 
             float ACx = Cx-Ax;
             float ACy = Cy-Ay;
             float ACmodule = sqrt(pow(ACx,2)+pow(ACy,2));
 
+            float normalACx = ACx / ACmodule;
+            float normalACy = ACy / ACmodule;
+
             float APx = xPos-Ax;
             float APy = yPos-Ay;
             float APmodule = sqrt(pow(APx,2)+pow(APy,2));
+
+            float normalAPx = APx / APmodule;
+            float normalAPy = APy / APmodule;
+
+            float theta = acos(normalABx * normalAPx + normalABy * normalAPy);
+            float alpha = acos(normalABx * normalACx + normalABy * normalACy);
+            float betha = acos(normalACx * normalAPx + normalACy * normalAPy);
+
+            bool collide = alpha == (theta + betha);
+
+            if(collide) {
+                printf("DEU BOM");
+            }else {
+                printf("NAO DEU TAO BOM");
+            }
+
+
             printf("lado esquerda");
 
 
