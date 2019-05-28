@@ -48,8 +48,8 @@ public:
     }
 };
 
-#define numRows 40
-#define numCols 20
+#define numRows 15
+#define numCols 10
 class ColorTiles{
 public:
 
@@ -99,13 +99,88 @@ public:
             }
     }
 
-    int testCliqueMouse(float xPos,float yPos) {
-        int counter = 0;
+    void testCliqueMouse(double xPos,double yPos) {
 
-        int rowClick = (int) (yPos / (tileHeight/2.0f));
-//        printf("Row: %d",rowClick);
-        int columnClick = (int) ((xPos - (rowClick * (tileWidth/2.0f)))/tileWidth);
-//        printf("Column: %d\n",columnClick);
+        int rowClick = (int) (yPos / (tileHeight/2.0));
+        printf("Row: %d",rowClick);
+        int columnClick = (int) ((xPos - (rowClick * (tileWidth/2.0)))/tileWidth);
+        printf("\nColumn: %d\n",columnClick);
+
+
+        float x0 = (float)columnClick*tileWidth  + (float)rowClick *(tileWidth/2.0f) ;
+        float y0 = (float)rowClick*tileHeight/2.0f ;
+
+        //left point
+        float Ax = x0;
+        float Ay = y0 + tileHeight/2.0f;
+
+        //top point
+        float Bx = x0 + tileWidth/2.0f;
+        float By = y0;
+
+        //bottom point
+        float Cx = x0 + tileWidth/2.0f;
+        float Cy = y0 + tileHeight;
+
+        //right point
+        float Dx = x0 + tileWidth;
+        float Dy = y0 + tileHeight/2.0f;
+
+
+        if(1==1){
+            printf("\nx0: %f\n",x0);
+            printf("\ny0: %f\n",y0);
+
+            printf("\nleftPoint x %f",Ax);
+            printf("\nleftPoint y %f\n",Ay);
+
+            printf("\ntopPointX x %f",Bx);
+            printf("\ntopPointY y %f\n",By);
+
+
+            printf("\nbottomPointX x %f",Cx);
+            printf("\nbottomPointY y %f\n",Cy);
+
+
+            printf("\nrightPointX x %f",Dx);
+            printf("\nrightPointY y %f\n",Dy);
+        }
+
+        if(xPos < Bx){
+            //testar lado da esquerda
+            printf("lado esquerda");
+
+            float ABx = Bx-Ax;
+            float ABy = By-Ay;
+            float ABmodule = sqrt(pow(ABx,2)+pow(ABy,2));
+
+            printf("\nABx x %f",Dx);
+            printf("\nrightPointY y %f\n",Dy);
+
+            float ACx = Cx-Ax;
+            float ACy = Cy-Ay;
+            float ACmodule = sqrt(pow(ACx,2)+pow(ACy,2));
+
+            float APx = xPos-Ax;
+            float APy = yPos-Ay;
+            float APmodule = sqrt(pow(APx,2)+pow(APy,2));
+            printf("lado esquerda");
+
+
+        } else{
+            //testar lado da direita
+            printf("lado direita");
+        }
+
+
+
+
+
+
+
+
+
+
 
         if(matrixColors[rowClick][columnClick].isVisible){
             if (matrixColors[rowClick][columnClick].isSelected) {
@@ -115,9 +190,24 @@ public:
             }
         }
 
-        return counter;
     }
 
+    void collision(){
+
+    }
+
+    /**
+
+    float TriangleArea(rowClick,columnClick){
+
+        this->tileWidth
+        this->tileHeight
+
+
+
+
+    }
+*/
     void draw(Shader *shaderProgram) {
 
         // Define shaderProgram como o shader a ser utilizado

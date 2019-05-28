@@ -61,7 +61,10 @@ Define acoes do mouse
         xpos = WIDTH * xpos / RESIZED_WIDTH;
         ypos = HEIGHT * ypos / RESIZED_HEIGHT;
 
-        int manyMatcheds = colorsTiles->testCliqueMouse((float)xpos,(float)ypos);
+        //REMOVER VAR
+        int manyMatcheds =0;
+
+        colorsTiles->testCliqueMouse(xpos,ypos);
         if(manyMatcheds>0){
             printf("Você acertou %d.\n",manyMatcheds);
             POINTS = POINTS + calculePoints(manyMatcheds);
