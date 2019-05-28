@@ -1,7 +1,3 @@
-//
-// Created by Gian Boschetti on 2019-05-13.
-//
-
 #define DEBUG 1
 
 class Tile {
@@ -103,10 +99,17 @@ public:
         int rowClick = (int) (yPos / (tileHeight/2.0));
         int columnClick = (int) ((xPos - (rowClick * (tileWidth/2.0)))/tileWidth);
 
-
         float x0 = ((float)columnClick)*tileWidth  + ((float)rowClick) *(tileWidth/2.0f) ;
         float y0 = ((float)rowClick)*tileHeight/2.0f ;
 
+        //   _______B_______
+        //   |              |
+        // A |              |  D
+        //   |              |
+        //   |______________|
+        //          C
+
+        //
         //left point
         float Ax = x0;
         float Ay = y0 + tileHeight/2.0f;
@@ -143,7 +146,7 @@ public:
 
         if(xPos < Bx){
             //testar lado da esquerda
-            printf("\nlado esquerda");
+            if(DEBUG==1) printf("\nlado esquerda");
 
             if(testPointCollision(Ax,Ay, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
@@ -157,7 +160,7 @@ public:
 
         } else{
             //testar lado da direita
-            printf("lado direita");
+            if(DEBUG==1) printf("\nlado direita");
             if(testPointCollision(Dx,Dy, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
             }else {
@@ -170,15 +173,6 @@ public:
             }
 
         }
-
-
-
-
-
-
-
-
-
 
 
         if(matrixColors[rowClick][columnClick].isVisible){
