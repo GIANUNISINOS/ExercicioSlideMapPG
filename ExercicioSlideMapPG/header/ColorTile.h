@@ -2,8 +2,7 @@
 // Created by Gian Boschetti on 2019-05-13.
 //
 
-#ifndef GAMEOFCOLORS_COLORTILE_H
-#define GAMEOFCOLORS_COLORTILE_H
+#define DEBUG 1
 
 class Tile {
 public:
@@ -102,13 +101,11 @@ public:
     void testCliqueMouse(double xPos,double yPos) {
 
         int rowClick = (int) (yPos / (tileHeight/2.0));
-        printf("Row: %d",rowClick);
         int columnClick = (int) ((xPos - (rowClick * (tileWidth/2.0)))/tileWidth);
-        printf("\nColumn: %d\n",columnClick);
 
 
-        float x0 = (float)columnClick*tileWidth  + (float)rowClick *(tileWidth/2.0f) ;
-        float y0 = (float)rowClick*tileHeight/2.0f ;
+        float x0 = ((float)columnClick)*tileWidth  + ((float)rowClick) *(tileWidth/2.0f) ;
+        float y0 = ((float)rowClick)*tileHeight/2.0f ;
 
         //left point
         float Ax = x0;
@@ -127,21 +124,19 @@ public:
         float Dy = y0 + tileHeight/2.0f;
 
 
-        if(1==1){
+        if(DEBUG==1){
+            printf("\nxPos: %f", xPos);
+            printf("\nyPos: %f", yPos);
+            printf("\nRow: %d", rowClick);
+            printf("\nColumn: %d\n", columnClick);
             printf("\nx0: %f\n",x0);
             printf("\ny0: %f\n",y0);
-
             printf("\nleftPoint x %f",Ax);
             printf("\nleftPoint y %f\n",Ay);
-
             printf("\ntopPointX x %f",Bx);
             printf("\ntopPointY y %f\n",By);
-
-
             printf("\nbottomPointX x %f",Cx);
             printf("\nbottomPointY y %f\n",Cy);
-
-
             printf("\nrightPointX x %f",Dx);
             printf("\nrightPointY y %f\n",Dy);
         }
@@ -150,47 +145,30 @@ public:
             //testar lado da esquerda
             printf("\nlado esquerda");
 
-//            float ABx = Bx-Ax;
-//            float ABy = By-Ay;
-//            float ABmodule = sqrt(pow(ABx,2)+pow(ABy,2));
-//
-//            float normalABx = ABx / ABmodule;
-//            float normalABy = ABy / ABmodule;
-//
-//            float ACx = Cx-Ax;
-//            float ACy = Cy-Ay;
-//            float ACmodule = sqrt(pow(ACx,2)+pow(ACy,2));
-//
-//            float normalACx = ACx / ACmodule;
-//            float normalACy = ACy / ACmodule;
-//
-//            float APx = xPos-Ax;
-//            float APy = yPos-Ay;
-//            float APmodule = sqrt(pow(APx,2)+pow(APy,2));
-//
-//            float normalAPx = APx / APmodule;
-//            float normalAPy = APy / APmodule;
-//
-//            float theta = acos(normalABx * normalAPx + normalABy * normalAPy);
-//            float alpha = acos(normalABx * normalACx + normalABy * normalACy);
-//            float betha = acos(normalACx * normalAPx + normalACy * normalAPy);
-//
-//            bool collide = alpha == (theta + betha);
-
-
-
             if(testPointCollision(Ax,Ay, Bx, By,  Cx, Cy, xPos, yPos)) {
-                printf("\nDEU BOM");
+                if(DEBUG==1) printf("\nDEU BOM");
             }else {
-                printf("\nNAO DEU TAO BOM");
+                if(DEBUG==1) printf("\nNAO DEU TAO BOM");
+                if(xPos<Bx  && yPos<Ay){
+                    //caminha p cima
+                    rowClick--;
+                }
             }
-
-
-
 
         } else{
             //testar lado da direita
             printf("lado direita");
+            if(testPointCollision(Dx,Dy, Bx, By,  Cx, Cy, xPos, yPos)) {
+                if(DEBUG==1) printf("\nDEU BOM");
+            }else {
+                if(DEBUG==1) printf("\nNAO DEU TAO BOM");
+                if(xPos>Bx  && yPos<Dy){
+                    //caminha p cima e direita
+                    rowClick--;
+                    columnClick++;
+                }
+            }
+
         }
 
 
@@ -239,7 +217,8 @@ public:
         float alpha = acos(normalABx * normalACx + normalABy * normalACy);
         float betha = acos(normalACx * normalAPx + normalACy * normalAPy);
 
-        bool collide = alpha == (theta + betha);
+        //bool collide = alpha == (theta + betha);
+        bool collide = 0.01>abs(alpha - (theta + betha));
         return collide;
     }
 
@@ -305,4 +284,3 @@ public:
 
 };
 
-#endif //GAMEOFCOLORS_COLORTILE_H
