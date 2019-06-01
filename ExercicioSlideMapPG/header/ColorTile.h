@@ -126,6 +126,7 @@ public:
         float Dx = x0 + tileWidth;
         float Dy = y0 + tileHeight/2.0f;
 
+        bool isClickValid = false;
 
         if(DEBUG==1){
             printf("\nxPos: %f", xPos);
@@ -150,16 +151,19 @@ public:
 
             if(testPointCollision(Ax,Ay, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
-            }else {
+                isClickValid =true;
+            } else {
                 if(DEBUG==1) printf("\nNAO DEU TAO BOM");
                 if(xPos<Bx  && yPos<Ay){
                     //caminha p cima
                     rowClick--;
+                    isClickValid =true;
                 }
             }
 
         } else{
             //testar lado da direita
+            isClickValid =true;
             if(DEBUG==1) printf("\nlado direita");
             if(testPointCollision(Dx,Dy, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
@@ -174,15 +178,16 @@ public:
 
         }
 
-
-        if(matrixColors[rowClick][columnClick].isVisible){
-            if (matrixColors[rowClick][columnClick].isSelected) {
-                matrixColors[rowClick][columnClick].isSelected = false;
-            } else {
-                matrixColors[rowClick][columnClick].isSelected = true;
+        if(isClickValid==true){
+            if(matrixColors[rowClick][columnClick].isVisible){
+                if (matrixColors[rowClick][columnClick].isSelected) {
+                    matrixColors[rowClick][columnClick].isSelected = false;
+                } else {
+                    matrixColors[rowClick][columnClick].isSelected = true;
+                }
             }
-        }
 
+        }
     }
 
     bool testPointCollision(float RefenceX,float RefenceY, float Bx,float By, float Cx,float Cy, float Px, float Py){
@@ -211,7 +216,7 @@ public:
         float alpha = acos(normalABx * normalACx + normalABy * normalACy);
         float betha = acos(normalACx * normalAPx + normalACy * normalAPy);
 
-        //bool collide = alpha == (theta + betha);
+       // bool collide = alpha == (theta + betha);
         bool collide = 0.01>abs(alpha - (theta + betha));
         return collide;
     }
