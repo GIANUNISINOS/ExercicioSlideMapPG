@@ -1,3 +1,8 @@
+#define numRows 12
+#define numCols 12
+#define TILE_WIDTH 80
+#define TILE_HEIGHT 40
+
 #ifdef __APPLE__
     #include "header/Includes.h";
     #include "header/Shader.h";
@@ -18,10 +23,10 @@ int ROUNDS = 5;
 int POINTS = 0;
 
 //Atributos janela
-int WIDTH = 800;
-int HEIGHT = 600;
-int RESIZED_WIDTH = 800;
-int RESIZED_HEIGHT = 600;
+int WIDTH = numRows*TILE_WIDTH;
+int HEIGHT = numCols*TILE_HEIGHT;
+int RESIZED_WIDTH = numRows*TILE_WIDTH;
+int RESIZED_HEIGHT = numCols*TILE_HEIGHT;
 
 //teclas pressionadas
 int keys[1024];

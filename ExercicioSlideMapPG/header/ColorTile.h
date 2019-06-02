@@ -43,12 +43,12 @@ public:
     }
 };
 
-#define numRows 15
-#define numCols 10
 class ColorTiles{
 public:
 
     float tileWidth, tileHeight;
+
+    int lastTileSelectedCol, lastTileSelectedRow;
 
     glm::mat4 modelMatrix;
 
@@ -62,6 +62,9 @@ public:
         this->tileHeight = totalHeight / (float)numRows;
 
         this->modelMatrix = glm::mat4(1);
+
+        this-> lastTileSelectedCol = -1;
+        this-> lastTileSelectedRow = -1;
 
         this->setupVertices(tileWidth, tileHeight);
 
@@ -178,12 +181,20 @@ public:
 
         }
 
+        if(this->lastTileSelectedCol>-1
+                && this->lastTileSelectedRow>-1
+                && isClickValid==true){
+                this->matrixColors[lastTileSelectedRow][lastTileSelectedCol].isSelected = false;
+        }
+
         if(isClickValid==true){
             if(matrixColors[rowClick][columnClick].isVisible){
-                if (matrixColors[rowClick][columnClick].isSelected) {
-                    matrixColors[rowClick][columnClick].isSelected = false;
+                if (this->matrixColors[rowClick][columnClick].isSelected) {
+                    this->matrixColors[rowClick][columnClick].isSelected = false;
                 } else {
-                    matrixColors[rowClick][columnClick].isSelected = true;
+                    this->matrixColors[rowClick][columnClick].isSelected = true;
+                    this->lastTileSelectedRow = rowClick;
+                    this->lastTileSelectedCol =columnClick;
                 }
             }
 
@@ -221,18 +232,6 @@ public:
         return collide;
     }
 
-    /**
-
-    float TriangleArea(rowClick,columnClick){
-
-        this->tileWidth
-        this->tileHeight
-
-
-
-
-    }
-*/
     void draw(Shader *shaderProgram) {
 
         // Define shaderProgram como o shader a ser utilizado
