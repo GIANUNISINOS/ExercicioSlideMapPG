@@ -56,6 +56,30 @@ public:
 
     Tile matrixColors[numRows][numCols] = {};
 
+	//   _______B_______
+	//   |              |
+	// A |              |  D
+	//   |              |
+	//   |______________|
+	//          C
+
+	//
+	//left point
+	float Ax;
+	float Ay;
+
+	//top point
+	float Bx;
+	float By;
+
+	//bottom point
+	float Cx;
+	float Cy;
+
+	//right point
+	float Dx;
+	float Dy;
+
     ColorTiles(float totalWidth, float totalHeight)
     {
         this->tileWidth = TILE_WIDTH;
@@ -72,9 +96,6 @@ public:
     }
 
     void setupVertices(float width, float height) {
-        /*
-            Comeca centralizado no zero
-        */
         float verticesCoordinates[] = {
                 // positions
                 width / 2.0f,   0.0f,           0.0f,	// TOP
@@ -97,47 +118,50 @@ public:
             }
     }
 
+	void setRelevantPoints(float row, float col) {
+		/*
+			Talvez ideal seria retornar uma struct com essas variáveis,
+			em vez de elas serem atributos de classe
+		*/
+		float x0 = ((float)col)*tileWidth + ((float)row) *(tileWidth / 2.0f);
+		float y0 = ((float)row)*tileHeight / 2.0f;
+
+		this->Ax = x0;
+		this->Ay = y0 + tileHeight / 2.0f;
+
+		//top point
+		this->Bx = x0 + tileWidth / 2.0f;
+		this->By = y0;
+
+		//bottom point
+		this->Cx = x0 + tileWidth / 2.0f;
+		this->Cy = y0 + tileHeight;
+
+		//right point
+		this->Dx = x0 + tileWidth;
+		this->Dy = y0 + tileHeight / 2.0f;
+	}
+
     void testCliqueMouse(double xPos,double yPos) {
 
         int rowClick = (int) (yPos / (tileHeight/2.0));
         int columnClick = (int) ((xPos - (rowClick * (tileWidth/2.0)))/tileWidth);
 
-        float x0 = ((float)columnClick)*tileWidth  + ((float)rowClick) *(tileWidth/2.0f) ;
-        float y0 = ((float)rowClick)*tileHeight/2.0f ;
+		/*Para garantir que apenas o mapa, ou areas bem proximas ao mapa sejam clicaveis*/
+		if (rowClick < 0 || columnClick < 0)				return;
+		if (rowClick >= numRows || columnClick >= numCols)	return;
 
-        //   _______B_______
-        //   |              |
-        // A |              |  D
-        //   |              |
-        //   |______________|
-        //          C
+		printf("\nrowClick: %d columClick %d", rowClick, columnClick);
 
-        //
-        //left point
-        float Ax = x0;
-        float Ay = y0 + tileHeight/2.0f;
-
-        //top point
-        float Bx = x0 + tileWidth/2.0f;
-        float By = y0;
-
-        //bottom point
-        float Cx = x0 + tileWidth/2.0f;
-        float Cy = y0 + tileHeight;
-
-        //right point
-        float Dx = x0 + tileWidth;
-        float Dy = y0 + tileHeight/2.0f;
-
-        bool isClickValid = false;
+		this->setRelevantPoints(rowClick, columnClick);
 
         if(DEBUG==1){
             printf("\nxPos: %f", xPos);
             printf("\nyPos: %f", yPos);
             printf("\nRow: %d", rowClick);
             printf("\nColumn: %d\n", columnClick);
-            printf("\nx0: %f\n",x0);
-            printf("\ny0: %f\n",y0);
+           // printf("\nx0: %f\n",x0);
+           // printf("\ny0: %f\n",y0);
             printf("\nleftPoint x %f",Ax);
             printf("\nleftPoint y %f\n",Ay);
             printf("\ntopPointX x %f",Bx);
@@ -154,19 +178,25 @@ public:
 
             if(testPointCollision(Ax,Ay, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
-                isClickValid =true;
             } else {
                 if(DEBUG==1) printf("\nNAO DEU TAO BOM");
+				//if (columnClick == 0) return;
                 if(xPos<Bx  && yPos<Ay){
                     //caminha p cima
                     rowClick--;
-                    isClickValid =true;
+					/*
+						Testa se o clique está dentro do novo tile
+						Na esquerda poderia ter um if para ser feito apenas no col 0
+						e na direita apenas no col lenght-1;
+					*/
+					this->setRelevantPoints(rowClick, columnClick);
+
+					if (testPointCollision(Ax, Ay, Bx, By, Cx, Cy, xPos, yPos) == false) return;
                 }
             }
 
         } else{
             //testar lado da direita
-            isClickValid =true;
             if(DEBUG==1) printf("\nlado direita");
             if(testPointCollision(Dx,Dy, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
@@ -176,29 +206,36 @@ public:
                     //caminha p cima e direita
                     rowClick--;
                     columnClick++;
+					/*
+						Testa se o clique está dentro do novo tile
+						Na esquerda poderia ter um if para ser feito apenas no col 0
+						e na direita apenas no col lenght-1;
+					*/
+					this->setRelevantPoints(rowClick, columnClick);
+					
+					if (testPointCollision(Dx, Dy, Bx, By, Cx, Cy, xPos, yPos) == false) return;
                 }
             }
 
         }
 
         if(this->lastTileSelectedCol>-1
-                && this->lastTileSelectedRow>-1
-                && isClickValid==true){
+                && this->lastTileSelectedRow>-1){
                 this->matrixColors[lastTileSelectedRow][lastTileSelectedCol].isSelected = false;
         }
 
-        if(isClickValid==true){
-            if(matrixColors[rowClick][columnClick].isVisible){
-                if (this->matrixColors[rowClick][columnClick].isSelected) {
-                    this->matrixColors[rowClick][columnClick].isSelected = false;
-                } else {
-                    this->matrixColors[rowClick][columnClick].isSelected = true;
-                    this->lastTileSelectedRow = rowClick;
-                    this->lastTileSelectedCol =columnClick;
-                }
+       
+        if(matrixColors[rowClick][columnClick].isVisible){
+            if (this->matrixColors[rowClick][columnClick].isSelected) {
+                this->matrixColors[rowClick][columnClick].isSelected = false;
+            } else {
+                this->matrixColors[rowClick][columnClick].isSelected = true;
+                this->lastTileSelectedRow = rowClick;
+                this->lastTileSelectedCol =columnClick;
             }
-
         }
+
+        
     }
 
     bool testPointCollision(float RefenceX,float RefenceY, float Bx,float By, float Cx,float Cy, float Px, float Py){

@@ -27,6 +27,7 @@
     <Image Include="resource\textura2.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\ColorTile.h" />
     <ClInclude Include="header\GameObject.h" />
     <ClInclude Include="header\Includes.h" />
     <ClInclude Include="header\Position.h" />
@@ -47,7 +48,7 @@
     <Text Include="shader\vertexShader.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6CE88CAA-5B08-4D10-90E2-5A9051699676}</ProjectGuid>
+    <ProjectGuid>{70AF626D-C819-4CFC-93B2-879AC21B7EEF}</ProjectGuid>
     <RootNamespace>Sabertooth</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
