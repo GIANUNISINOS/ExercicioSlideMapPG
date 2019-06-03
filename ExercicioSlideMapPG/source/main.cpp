@@ -1,5 +1,5 @@
 #define numRows 12
-#define numCols 12
+#define numCols 5
 #define TILE_WIDTH 80
 #define TILE_HEIGHT 40
 
@@ -23,10 +23,10 @@ int ROUNDS = 5;
 int POINTS = 0;
 
 //Atributos janela
-int WIDTH = numRows*TILE_WIDTH;
-int HEIGHT = numCols*TILE_HEIGHT;
-int RESIZED_WIDTH = numRows*TILE_WIDTH;
-int RESIZED_HEIGHT = numCols*TILE_HEIGHT;
+int WIDTH = numRows*TILE_WIDTH+200;
+int HEIGHT = numCols*TILE_HEIGHT+200;
+int RESIZED_WIDTH = numRows*TILE_WIDTH+200;
+int RESIZED_HEIGHT = numCols*TILE_HEIGHT+200;
 
 //teclas pressionadas
 int keys[1024];
@@ -156,6 +156,9 @@ int main() {
 
 		//desenha
         colorsTiles->draw(shaderProgram);
+
+        //reagir a acoes do teclado
+        colorsTiles->keyboard_reaction(keys);
 
         //fila eventos 
 		glfwPollEvents();

@@ -58,8 +58,8 @@ public:
 
     ColorTiles(float totalWidth, float totalHeight)
     {
-        this->tileWidth = totalWidth / (float)numCols;
-        this->tileHeight = totalHeight / (float)numRows;
+        this->tileWidth = TILE_WIDTH;
+        this->tileHeight = TILE_HEIGHT;
 
         this->modelMatrix = glm::mat4(1);
 
@@ -231,6 +231,66 @@ public:
         bool collide = 0.01>abs(alpha - (theta + betha));
         return collide;
     }
+
+
+    /*
+       Função que responde às teclas pressionadas
+   */
+    void keyboard_reaction(int keys[1024]) {
+
+        if (keys[GLFW_KEY_UP] == 1) {
+            do_a_movement('n');
+        } else if (keys[GLFW_KEY_DOWN] == 1) {
+            do_a_movement('s');
+        } else if (keys[GLFW_KEY_LEFT] == 1) {
+            do_a_movement('w');
+        } else if (keys[GLFW_KEY_RIGHT] == 1) {
+            do_a_movement('e');
+        }
+    }
+
+    void do_a_movement(char a){
+        if(a=='n'){//up
+            if(this->lastTileSelectedRow>0){
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = false;
+
+                this->lastTileSelectedRow = this->lastTileSelectedRow-1;
+                this->lastTileSelectedCol = this->lastTileSelectedCol;
+
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = true;
+            }
+        } else if(a=='s'){//down
+            if(this->lastTileSelectedRow<(numRows-1)){
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = false;
+
+                this->lastTileSelectedRow = this->lastTileSelectedRow+1;
+                this->lastTileSelectedCol = this->lastTileSelectedCol;
+
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = true;
+            }
+        } else if(a=='w') {//left
+            if(this->lastTileSelectedCol>0&&this->lastTileSelectedRow<(numRows-1)){
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = false;
+
+                this->lastTileSelectedRow = this->lastTileSelectedRow+1;
+                this->lastTileSelectedCol = this->lastTileSelectedCol-1;
+
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = true;
+            }
+        } else if(a=='e') {//right
+            if(this->lastTileSelectedCol<(numCols-1)&&this->lastTileSelectedRow>0){
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = false;
+
+                this->lastTileSelectedRow = this->lastTileSelectedRow-1;
+                this->lastTileSelectedCol = this->lastTileSelectedCol+1;
+
+                this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = true;
+            }
+        }
+
+
+    }
+
 
     void draw(Shader *shaderProgram) {
 
