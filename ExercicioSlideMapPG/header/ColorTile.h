@@ -149,7 +149,7 @@ public:
 
 		/*Para garantir que apenas o mapa, ou areas bem proximas ao mapa sejam clicaveis*/
 		if (rowClick < 0 || columnClick < 0)				return;
-		if (rowClick >= numRows || columnClick >= numCols)	return;
+		if (rowClick > numRows || columnClick >= numCols)	return;
 
 		printf("\nrowClick: %d columClick %d", rowClick, columnClick);
 
@@ -178,12 +178,19 @@ public:
 
             if(testPointCollision(Ax,Ay, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
+                if(rowClick==numRows){
+                    return;
+                }
             } else {
                 if(DEBUG==1) printf("\nNAO DEU TAO BOM");
-				//if (columnClick == 0) return;
+                if(rowClick==0){
+                    return;
+                }
                 if(xPos<Bx  && yPos<Ay){
                     //caminha p cima
-                    rowClick--;
+                    if(rowClick>0) {
+                        rowClick--;
+                    }
 					/*
 						Testa se o clique está dentro do novo tile
 						Na esquerda poderia ter um if para ser feito apenas no col 0
@@ -200,12 +207,20 @@ public:
             if(DEBUG==1) printf("\nlado direita");
             if(testPointCollision(Dx,Dy, Bx, By,  Cx, Cy, xPos, yPos)) {
                 if(DEBUG==1) printf("\nDEU BOM");
+                if(rowClick==numRows){
+                    return;
+                }
             }else {
                 if(DEBUG==1) printf("\nNAO DEU TAO BOM");
+                if(rowClick==0){
+                    return;
+                }
                 if(xPos>Bx  && yPos<Dy){
                     //caminha p cima e direita
-                    rowClick--;
-                    columnClick++;
+                    if(columnClick<(numCols-1)&&rowClick>0) {
+                        rowClick--;
+                        columnClick++;
+                    }
 					/*
 						Testa se o clique está dentro do novo tile
 						Na esquerda poderia ter um if para ser feito apenas no col 0
@@ -239,33 +254,33 @@ public:
     }
 
     bool testPointCollision(float RefenceX,float RefenceY, float Bx,float By, float Cx,float Cy, float Px, float Py){
-        float ABx = Bx-RefenceX;
-        float ABy = By-RefenceY;
-        float ABmodule = sqrt(pow(ABx,2)+pow(ABy,2));
+        double ABx = (double)Bx-(double)RefenceX;
+        double ABy = (double)By-(double)RefenceY;
+        double ABmodule = sqrt(pow(ABx,2)+pow(ABy,2));
 
-        float normalABx = ABx / ABmodule;
-        float normalABy = ABy / ABmodule;
+        double normalABx = ABx / ABmodule;
+        double normalABy = ABy / ABmodule;
 
-        float ACx = Cx-RefenceX;
-        float ACy = Cy-RefenceY;
-        float ACmodule = sqrt(pow(ACx,2)+pow(ACy,2));
+        double ACx = (double)Cx-(double)RefenceX;
+        double ACy = (double)Cy-(double)RefenceY;
+        double ACmodule = sqrt(pow(ACx,2)+pow(ACy,2));
 
-        float normalACx = ACx / ACmodule;
-        float normalACy = ACy / ACmodule;
+        double normalACx = ACx / ACmodule;
+        double normalACy = ACy / ACmodule;
 
-        float APx = Px-RefenceX;
-        float APy = Py-RefenceY;
-        float APmodule = sqrt(pow(APx,2)+pow(APy,2));
+        double APx = (double)Px-(double)RefenceX;
+        double APy = (double)Py-(double)RefenceY;
+        double APmodule = sqrt(pow(APx,2)+pow(APy,2));
 
-        float normalAPx = APx / APmodule;
-        float normalAPy = APy / APmodule;
+        double normalAPx = APx / APmodule;
+        double normalAPy = APy / APmodule;
 
-        float theta = acos(normalABx * normalAPx + normalABy * normalAPy);
-        float alpha = acos(normalABx * normalACx + normalABy * normalACy);
-        float betha = acos(normalACx * normalAPx + normalACy * normalAPy);
+        double theta = acos(normalABx * normalAPx + normalABy * normalAPy);
+        double alpha = acos(normalABx * normalACx + normalABy * normalACy);
+        double betha = acos(normalACx * normalAPx + normalACy * normalAPy);
 
-       // bool collide = alpha == (theta + betha);
-        bool collide = 0.01>abs(alpha - (theta + betha));
+        //bool collide = alpha == (theta + betha);
+        bool collide = 0.001>abs(alpha - (theta + betha));
         return collide;
     }
 
