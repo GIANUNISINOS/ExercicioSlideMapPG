@@ -174,15 +174,15 @@ public:
 
         if(xPos < Bx){
             //testar lado da esquerda
-            if(DEBUG==1) printf("\nlado esquerda");
+            if(DEBUG==1) printf("\nLado esquerdo");
 
             if(testPointCollision(Ax,Ay, Bx, By,  Cx, Cy, xPos, yPos)) {
-                if(DEBUG==1) printf("\nDEU BOM");
+                if(DEBUG==1) printf("\nDOES MATCH");
                 if(rowClick==numRows){
                     return;
                 }
             } else {
-                if(DEBUG==1) printf("\nNAO DEU TAO BOM");
+                if(DEBUG==1) printf("\nDOES NOT MATCH");
                 if(rowClick==0){
                     return;
                 }
@@ -204,14 +204,14 @@ public:
 
         } else{
             //testar lado da direita
-            if(DEBUG==1) printf("\nlado direita");
+            if(DEBUG==1) printf("\nLado direito");
             if(testPointCollision(Dx,Dy, Bx, By,  Cx, Cy, xPos, yPos)) {
-                if(DEBUG==1) printf("\nDEU BOM");
+                if(DEBUG==1) printf("\nDOES MATCH");
                 if(rowClick==numRows){
                     return;
                 }
             }else {
-                if(DEBUG==1) printf("\nNAO DEU TAO BOM");
+                if(DEBUG==1) printf("\nDOES NOT MATCH");
                 if(rowClick==0){
                     return;
                 }
@@ -307,7 +307,6 @@ public:
                 this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = false;
 
                 this->lastTileSelectedRow = this->lastTileSelectedRow-1;
-                this->lastTileSelectedCol = this->lastTileSelectedCol;
 
                 this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = true;
             }
@@ -316,7 +315,6 @@ public:
                 this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = false;
 
                 this->lastTileSelectedRow = this->lastTileSelectedRow+1;
-                this->lastTileSelectedCol = this->lastTileSelectedCol;
 
                 this->matrixColors[this->lastTileSelectedRow][this->lastTileSelectedCol].isSelected = true;
             }
@@ -368,11 +366,8 @@ public:
                         glGetUniformLocation(shaderProgram->Program, "matrix_OBJ"), 1,
                         GL_FALSE, glm::value_ptr(modelMatrix));
 
-
-
                 //seleciona o tile a ser desenhado
                 Tile tile = matrixColors[row][col];
-
 
                 if(!tile.isSelected){
                     glUniform3fv(
@@ -383,7 +378,6 @@ public:
                             glGetUniformLocation(shaderProgram->Program, "colorValues"), 1,
                             glm::value_ptr(glm::vec3(10,255,10)));
                 }
-
 
                 // Define em quais vertices sera desenhado pelo shader
                 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

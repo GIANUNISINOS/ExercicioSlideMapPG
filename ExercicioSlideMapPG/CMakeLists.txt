@@ -11,7 +11,7 @@ add_executable(ExercicioSlideMapPG
         header/Includes.h
         header/Shader.h
         header/VerticesObject.h
-        header/ColorTile.h header/Triangle.h)
+        header/ColorTile.h)
 
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
